@@ -4,7 +4,7 @@
 A 2D Fighting game inspired by Street Fighter.
 
 
-![Logo](https://i.imgur.com/UybhKZk.png)
+![Logo](https://i.imgur.com/bO77B6A.png)
 
 
 ## Authors
