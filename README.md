@@ -18,10 +18,9 @@ A 2D Fighting game inspired by Street Fighter.
 ---
 - Marcos Paulino - Pixel Art Design 
 - Muntag Diallo - Pixel Art Design
-- Jaiden Rankus - Pixel Art Design
 - Christopher Hodson - Pixel Art Design
 ---
 - Leo Hart - Art & Sound Design
 - Mason Bush - Art & Sound Design
-
+Jaiden Rankus - Art & Sound Design
 
