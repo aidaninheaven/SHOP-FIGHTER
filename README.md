@@ -1,5 +1,5 @@
 
-# SHOP FIGHTER I
+# SHOP FIGHTER II
 
 A 2D Fighting game inspired by Street Fighter.
 
