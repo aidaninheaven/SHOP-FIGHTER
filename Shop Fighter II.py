@@ -12,6 +12,10 @@ screenHeight = 600
 screen = pygame.display.set_mode((screenWidth, screenHeight))
 pygame.display.set_caption("Shop Fighter II")
 
+#set frame rate
+clock = pygame.time.Clock()
+FPS = 60
+
 
 #load background image
 bgImage = pygame.image.load("assets/images/background/placeholderBG.jfif").convert_alpha()
@@ -34,8 +38,14 @@ run = True
 
 while run == True:
 
+    clock.tick(FPS)
+
     #draw background
     drawBG()
+
+    #move fighters
+    fighter1.move()
+    fighter2.move()
 
     #draw fighters
     fighter1.draw(screen)
