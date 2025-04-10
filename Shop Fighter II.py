@@ -1,6 +1,8 @@
 import pygame
 from fighter import Fighter
 
+print(Fighter)
+
 pygame.init()
 
 #create game window
@@ -24,8 +26,8 @@ def drawBG():
 
 
 #create 2 instances of fighters
-#fighter1 = Fighter(200, 310)
-#fighter2 = Fighter(700, 310)
+fighter1 = Fighter(200, 310)
+fighter2 = Fighter(700, 310)
 
 #game loop
 run = True
@@ -36,8 +38,8 @@ while run == True:
     drawBG()
 
     #draw fighters
-    #fighter1.draw(screen)
-    #fighter2.draw(screen)
+    fighter1.draw(screen)
+    fighter2.draw(screen)
 
     #event handler
     for event in pygame.event.get():
