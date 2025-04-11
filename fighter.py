@@ -6,9 +6,13 @@ class Fighter():
 
         self.rect = pygame.Rect((x, y, 80, 180))
 
-    def move(self):
+        #Y velocity
+        self.velY = 0
+
+    def move(self, screenWidth):
 
         speed = 10
+        gravity = 2
         dx = 0
         dy = 0
 
@@ -17,9 +21,26 @@ class Fighter():
 
         #movement
         if key[pygame.K_a]:
-            dx = -speed
+            dx = -speed 
         if key[pygame.K_d]:
             dx = speed
+        #jump
+        if key[pygame.K_w]:
+            self.velY = -30
+
+        #apply gravity
+
+        self.velY += gravity
+        dy += self.velY
+
+        #ensure player stays on screen
+        if self.rect.left + dx < 0:
+
+            dx = 0 - self.rect.left
+
+        if self.rect.right + dx > screenWidth:
+
+            dx = screenWidth - self.rect.right
 
         #update player position
         self.rect.x += dx
