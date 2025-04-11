@@ -1,5 +1,6 @@
 import pygame
 from fighter import Fighter
+projectiles = []
 
 print(Fighter)
 
@@ -45,8 +46,21 @@ while run == True:
 
     #move fighters
     fighter1.move(screenWidth, screenHeight)
-    
 
+    
+    #projectile key
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_f]:
+        projectile = fighter1.fire()
+        if projectile:
+            projectiles.append(projectile)
+
+
+        #update and draw projectile
+        for p in projectiles:
+        p.update()
+        p.draw(screen)
+    
     #draw fighters
     fighter1.draw(screen)
     fighter2.draw(screen)
