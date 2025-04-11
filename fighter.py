@@ -9,7 +9,7 @@ class Fighter():
         #Y velocity
         self.velY = 0
 
-    def move(self, screenWidth):
+    def move(self, screenWidth, screenHeight):
 
         speed = 10
         gravity = 2
@@ -41,6 +41,11 @@ class Fighter():
         if self.rect.right + dx > screenWidth:
 
             dx = screenWidth - self.rect.right
+
+        if self.rect.bottom + dy > screenHeight - 110:
+
+            self.velY = 0
+            dy = screenHeight - 110 - self.rect.bottom
 
         #update player position
         self.rect.x += dx
