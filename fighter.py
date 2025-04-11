@@ -1,4 +1,5 @@
 import pygame
+from projectile import Projectile
 
 class Fighter():
     
@@ -51,6 +52,11 @@ class Fighter():
         self.rect.x += dx
         self.rect.y += dy
 
+    #firing funct
+    def fire(self):
+        direction = -1 if self.facing_left else 1
+        return Projectile(self.rect.centerx, self.rect.centery, direction)
+    
     def draw(self, surface):
 
         pygame.draw.rect(surface, (255, 0, 0), self.rect)
