@@ -44,8 +44,8 @@ while run == True:
     drawBG()
 
     #move fighters
-    fighter1.move()
-    fighter2.move()
+    fighter1.move(screenWidth)
+    
 
     #draw fighters
     fighter1.draw(screen)
