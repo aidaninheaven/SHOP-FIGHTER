@@ -1,5 +1,7 @@
+import pygame
+
 class Projectile:
-      def __init__(self, x, y, direction):
+    def __init__(self, x, y, direction):
         self.rect = pygame.Rect(x, y, 20, 10)
         self.speed = 12 * direction
 
