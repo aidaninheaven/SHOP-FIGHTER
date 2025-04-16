@@ -6,18 +6,19 @@ class Fighter():
     
     def __init__(self, x, y):
 
+        self.flip = False
         self.rect = pygame.Rect((x, y, 80, 180))
 
         #Y velocity
         self.velY = 0
-
-
         self.jump = False
         self.attacking = False
-        self.facingLeft = False
+       
 
         #which attack is being used
         self.attackType = 0
+
+        self.health = 100
 
     def move(self, screenWidth, screenHeight, surface, target):
 
@@ -78,6 +79,12 @@ class Fighter():
             self.jump = False
             dy = screenHeight - 110 - self.rect.bottom
 
+        #ensure players face each other
+        if target.rect.centerx > self.rect.centerx:
+            self.flip = False
+        else:
+            self.flip = True
+
         #update player position
         self.rect.x += dx
         self.rect.y += dy
@@ -86,24 +93,19 @@ class Fighter():
 
         self.attacking = True
 
-        attackingRect = pygame.Rect(self.rect.centerx, self.rect.y, 2 * self.rect.width, self.rect.height)
+        attackingRect = pygame.Rect(self.rect.centerx - (2 * self.rect.width * self.flip), self.rect.y, 2 * self.rect.width, self.rect.height)
 
         if attackingRect.colliderect(target.rect):
+            target.health -= 10
             print("Hit")
+            print(target.health)
 
 
 
         pygame.draw.rect(surface, (0, 255, 0), attackingRect)
 
-    def fire(self):
 
-        if self.facingLeft == True:
 
-            direction = -1
-
-            electroBall = Projectile(self.rect.centerx, self.rect.y, direction)
-
-        
 
     def draw(self, surface):
 
