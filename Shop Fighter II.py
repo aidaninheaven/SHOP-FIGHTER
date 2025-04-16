@@ -18,6 +18,10 @@ pygame.display.set_caption("Shop Fighter II")
 clock = pygame.time.Clock()
 FPS = 60
 
+#define colors
+RED = (255, 0, 0)
+YELLOW = (255, 255, 0)
+WHITE = (255, 255, 255)
 
 #load background image
 bgImage = pygame.image.load("assets/images/background/placeholderBG.jfif").convert_alpha()
@@ -29,6 +33,13 @@ def drawBG():
     
     scaledBG = pygame.transform.scale(bgImage, (screenWidth, screenHeight))
     screen.blit(scaledBG, (0,0))
+
+#function for drawing fighter health bars
+def drawHealthBar(health, x, y):
+    ratio = health / 100
+    pygame.draw.rect(screen, WHITE, (x - 2, y -2, 404, 34))
+    pygame.draw.rect(screen, RED, (x, y, 400, 30))
+    pygame.draw.rect(screen, YELLOW, (x, y, 400 * ratio, 30))
 
 
 #create 2 instances of fighters
@@ -44,6 +55,10 @@ while run == True:
 
     #draw background
     drawBG()
+
+    #show player stats
+    drawHealthBar(fighter1.health, 20, 20)
+    drawHealthBar(fighter2.health, 580, 20)
 
     #move fighters
     fighter1.move(screenWidth, screenHeight, screen, fighter2)
