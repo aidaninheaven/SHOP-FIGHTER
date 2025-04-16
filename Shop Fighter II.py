@@ -26,6 +26,9 @@ WHITE = (255, 255, 255)
 #load background image
 bgImage = pygame.image.load("assets/images/background/placeholderBG.jfif").convert_alpha()
 
+#load spritesheets
+
+
 
 #function for drawing background
 
