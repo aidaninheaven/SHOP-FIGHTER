@@ -28,7 +28,7 @@ bgImage = pygame.image.load("assets/images/background/placeholderBG.jfif").conve
 
 #load spritesheets
 
-
+#e3000Sheet = pygame.image.load("assets/images/e3000/pe3000.png").convert_alpha()
 
 #function for drawing background
 
