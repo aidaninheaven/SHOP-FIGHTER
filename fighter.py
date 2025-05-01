@@ -140,7 +140,7 @@ class Fighter():
             elif self.attackType == 2:
                 self.updateAction(4) #4: attack2
         
-        if self.jump == True:
+        elif self.jump == True:
             self.updateAction(2) #2: jump
 
         elif self.running == True:
