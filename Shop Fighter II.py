@@ -21,14 +21,29 @@ FPS = 60
 #define colors
 RED = (255, 0, 0)
 YELLOW = (255, 255, 0)
-WHITE = (255, 255, 255)
+WHITE = (255, 255, 255) 
+
+#define fighter variables. SIZE IS FOR PLACEHOLERS
+e3000Size = 29
+e3000Data = [e3000Size]
+
+wizardSize = 29
+wizardData = [wizardSize]
+
 
 #load background image
 bgImage = pygame.image.load("assets/images/background/placeholderBG.jfif").convert_alpha()
 
 #load spritesheets
 
-#e3000Sheet = pygame.image.load("assets/images/e3000/pe3000.png").convert_alpha()
+e3000Sheet = pygame.image.load("assets/images/e3000/PlaceHolderFighter.png").convert_alpha()
+wizardSheet = pygame.image.load("assets/images/wizard/PlaceHolderFighter.png").convert_alpha()
+
+#define number of steps in each animation
+e3000AnimationSteps = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+wizardAnimationSteps = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+
+
 
 #function for drawing background
 
@@ -46,8 +61,8 @@ def drawHealthBar(health, x, y):
 
 
 #create 2 instances of fighters
-fighter1 = Fighter(200, 310)
-fighter2 = Fighter(700, 310)
+fighter1 = Fighter(200, 310, e3000Data, e3000Sheet, e3000AnimationSteps)
+fighter2 = Fighter(700, 310, wizardData, wizardSheet, wizardAnimationSteps)
 
 #game loop
 run = True
