@@ -24,11 +24,17 @@ YELLOW = (255, 255, 0)
 WHITE = (255, 255, 255) 
 
 #define fighter variables. SIZE IS FOR PLACEHOLERS
-e3000Size = 29
-e3000Data = [e3000Size]
+e3000Size = 162
+e3000Scale = 4
+#prolly need to change this when we get new sprites
+e3000Offset = [72, 56]
+e3000Data = [e3000Size, e3000Scale, e3000Offset]
 
-wizardSize = 29
-wizardData = [wizardSize]
+wizardSize = 250
+wizardScale = 3
+#prolly need to change this when we get new sprites
+wizardOffset = [112, 107]
+wizardData = [wizardSize, wizardScale, wizardOffset]
 
 
 #load background image
@@ -36,12 +42,12 @@ bgImage = pygame.image.load("assets/images/background/placeholderBG.jfif").conve
 
 #load spritesheets
 
-e3000Sheet = pygame.image.load("assets/images/e3000/PlaceHolderFighter.png").convert_alpha()
-wizardSheet = pygame.image.load("assets/images/wizard/PlaceHolderFighter.png").convert_alpha()
+e3000Sheet = pygame.image.load("assets/images/e3000/warrior.png").convert_alpha()
+wizardSheet = pygame.image.load("assets/images/wizard/wizard.png").convert_alpha()
 
 #define number of steps in each animation
-e3000AnimationSteps = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
-wizardAnimationSteps = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+e3000AnimationSteps = [10, 8, 1, 7, 7, 3, 7]
+wizardAnimationSteps = [8, 8, 1, 8, 8, 3, 7]
 
 
 
@@ -61,8 +67,8 @@ def drawHealthBar(health, x, y):
 
 
 #create 2 instances of fighters
-fighter1 = Fighter(200, 310, e3000Data, e3000Sheet, e3000AnimationSteps)
-fighter2 = Fighter(700, 310, wizardData, wizardSheet, wizardAnimationSteps)
+fighter1 = Fighter(200, 310, False, e3000Data, e3000Sheet, e3000AnimationSteps)
+fighter2 = Fighter(700, 310, True, wizardData, wizardSheet, wizardAnimationSteps)
 
 #game loop
 run = True
@@ -81,6 +87,9 @@ while run == True:
     #move fighters
     fighter1.move(screenWidth, screenHeight, screen, fighter2)
     
+    #update fighters
+    fighter1.update()
+    fighter2.update()
 
     #draw fighters
     fighter1.draw(screen)
