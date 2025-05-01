@@ -4,9 +4,14 @@ from projectiles import Projectile
 
 class Fighter():
     
-    def __init__(self, x, y):
+    def __init__(self, x, y, data, spriteSheet, animationSteps):
+
+        self.size = data[0]
 
         self.flip = False
+
+        self.animationList = self.loadImages(spriteSheet, animationSteps)
+
         self.rect = pygame.Rect((x, y, 80, 180))
 
         #Y velocity
@@ -19,6 +24,27 @@ class Fighter():
         self.attackType = 0
 
         self.health = 100
+
+
+    def loadImages(self, spriteSheet, animationSteps):
+
+        #extract images from spritesheet
+        animationList = []
+
+        for y, animation in enumerate(animationSteps):
+
+            tempImgList = []
+
+            for x in range(animation):
+                tempImg = spriteSheet.subsurface(x * self.size, 0, self.size, self.size)
+                tempImgList.append(tempImg)
+
+            animationList.append(tempImgList)
+
+        return animationList
+
+
+
 
     def move(self, screenWidth, screenHeight, surface, target):
 
