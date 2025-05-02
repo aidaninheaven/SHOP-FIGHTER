@@ -237,24 +237,7 @@ class Fighter():
                 target.hit = True
                 print("Hit")
                 print(target.health)
-                
-        if self.attackType == 3:
- 
-            color = (0, 255, 255)
-            projectile = Projectile(self.rect.centerx, self.rect.centery, 10, color, 1 if not self.flip else -1, self.projectile_damage)
-            self.projectiles.append(projectile)  #adds projectile to the list
 
-        for projectile in self.projectiles[:]:
-            projectile.move()  #moves the projectile
-            
-            if projectile.check_collision(target):  #checks for collision w the target
-                self.projectiles.remove(projectile)  #remove the projectile if it hits
-            projectile.draw(surface)  #draw the projectile
-        if attackingRect.colliderect(target.rect):
-            target.health -= 10
-            print("Hit")
-            print(target.health)
-            
             pygame.draw.rect(surface, (0, 255, 0), attackingRect)
 
 
