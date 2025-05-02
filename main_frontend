@@ -5,16 +5,24 @@ import math
 
 pygame.init()
 
+# Initialize the mixer for playing music
+pygame.mixer.init()
+
+# Load and play background music
+pygame.mixer.music.load("Menu Song.mp3")
+pygame.mixer.music.play(-1)  # -1 means loop indefinitely
+pygame.mixer.music.set_volume(1.0)  # Set volume to 100%
+
 screen = pygame.display.set_mode((1080, 720))
 clock = pygame.time.Clock()
-titlebg=pygame.image.load("titlebg.png").convert_alpha()
-title=pygame.image.load("SFIIPixelLogo.png").convert_alpha()
-title=pygame.transform.scale_by(title,5)
-setpanel=pygame.image.load("settingspanel.png").convert_alpha()
-cursor=pygame.image.load("Cursor.png").convert_alpha()
+titlebg = pygame.image.load("titlebg.png").convert_alpha()
+title = pygame.image.load("SFIIPixelLogo.png").convert_alpha()
+title = pygame.transform.scale_by(title, 5)
+setpanel = pygame.image.load("settingspanel.png").convert_alpha()
+cursor = pygame.image.load("Cursor.png").convert_alpha()
 running = True
 pygame.display.set_caption("SHOP FIGHTER II")
-textfont = pygame.font.SysFont("mssansserif",20)
+textfont = pygame.font.SysFont("mssansserif", 20)
 for i in range(60):
     screen.fill("black")
     pygame.display.flip()
@@ -26,20 +34,19 @@ screen.fill("white")
 pygame.display.flip()
 time.sleep(0.1)
 
-itr=20
+itr = 20
 for i in range(itr):
-    titlex=297.5
-    titley=100
+    titlex = 297.5
+    titley = 100
     screen.fill("black")
-    screen.blit(titlebg,(0,0))
-    dir=random.randrange(-180,180)
-    titlex=titlex+(math.sin(dir))*itr
-    titley=titley+(math.cos(dir))*itr
-    screen.blit(title,(titlex,titley))
+    screen.blit(titlebg, (0, 0))
+    dir = random.randrange(-180, 180)
+    titlex = titlex + (math.sin(dir)) * itr
+    titley = titley + (math.cos(dir)) * itr
+    screen.blit(title, (titlex, titley))
     pygame.display.flip()
     time.sleep(0.01)
-    itr=itr-1
-
+    itr = itr - 1
 
 ScreenWidth = 1080
 ScreenHeight = 720
@@ -74,9 +81,9 @@ class Button():
         surface.blit(self.image, (self.rect.x, self.rect.y))
         return action
     
-play_button = Button(400, 300, pygame.image.load("Button.png").convert_alpha(), 3.5)
-settings_button = Button(400, 400, pygame.image.load("Button.png").convert_alpha(), 3.5)
-credits_button = Button(400, 500, pygame.image.load("Button.png").convert_alpha(), 3.5)
+play_button = Button(430, 300, pygame.image.load("bttnPlay.png").convert_alpha(), 3.5)
+settings_button = Button(430, 400, pygame.image.load("bttnSets.png").convert_alpha(), 3.5)
+credits_button = Button(430, 500, pygame.image.load("bttnCredits.png").convert_alpha(), 3.5)
 
 game_screen = pygame.image.load("main_menu.webp").convert_alpha()
 settings_screen = pygame.image.load("settings_button.jpg").convert_alpha()
@@ -89,6 +96,13 @@ while run:
     screen.fill("black")
 
     if current_screen == "main_menu":
+
+        # draw title and background
+        screen.blit(titlebg, (0, 0))             
+
+        screen.blit(title, (297.5, 100))
+
+
         # draw main menu
         screen.blit(titlebg, (0, 0))
         screen.blit(title, (297.5, 100))
@@ -124,7 +138,7 @@ while run:
         if pygame.key.get_pressed()[pygame.K_ESCAPE]:  # return to main menu
             current_screen = "main_menu"
 
-    clock.tick(60)  # limit FPS to 60
+    clock.tick(120)  # limit FPS to 120
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -133,6 +147,3 @@ while run:
     pygame.display.flip()
 
 pygame.quit()
-
-    
-
