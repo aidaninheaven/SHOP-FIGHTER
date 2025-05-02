@@ -1,0 +1,253 @@
+import pygame
+import time
+import random
+import math
+
+from fighter import Fighter
+
+pygame.init()
+
+# Initialize the mixer for playing music
+pygame.mixer.init()
+
+# Load and play background music
+pygame.mixer.music.load("assets/audio/Menu Song.mp3")
+pygame.mixer.music.play(-1)  # -1 means loop indefinitely
+pygame.mixer.music.set_volume(1.0)  # Set volume to 100%
+
+screen = pygame.display.set_mode((1080, 720))
+clock = pygame.time.Clock()
+titlebg = pygame.image.load("assets/images/menu/titlebg.png").convert_alpha()
+title = pygame.image.load("assets/images/menu/SFIIPixelLogo.png").convert_alpha()
+title = pygame.transform.scale_by(title, 5)
+setpanel = pygame.image.load("assets/images/menu/settingspanel.png").convert_alpha()
+cursor = pygame.image.load("assets/images/menu/Cursor.png").convert_alpha()
+running = True
+pygame.display.set_caption("SHOP FIGHTER II")
+textfont = pygame.font.SysFont("mssansserif", 20)
+for i in range(60):
+    screen.fill("black")
+    pygame.display.flip()
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+    time.sleep(0.01)
+screen.fill("white")
+pygame.display.flip()
+time.sleep(0.1)
+
+itr = 20
+for i in range(itr):
+    titlex = 297.5
+    titley = 100
+    screen.fill("black")
+    screen.blit(titlebg, (0, 0))
+    dir = random.randrange(-180, 180)
+    titlex = titlex + (math.sin(dir)) * itr
+    titley = titley + (math.cos(dir)) * itr
+    screen.blit(title, (titlex, titley))
+    pygame.display.flip()
+    time.sleep(0.01)
+    itr = itr - 1
+
+ScreenWidth = 1080
+ScreenHeight = 720
+
+screen = pygame.display.set_mode((ScreenWidth, ScreenHeight))
+pygame.display.set_caption("Shopfighter")
+
+current_screen = "main_menu"  # Start with the main menu
+
+# Button class
+
+class Button():
+    def __init__(self, x, y, image, scale):       
+        width = image.get_width()   
+        height = image.get_height()   
+        self.image = pygame.transform.scale(image, (int(width * scale), int(height * scale)))     
+        self.rect = self.image.get_rect()    
+        self.rect.topleft = (x, y)      
+        self.clicked = False
+
+    def draw(self, surface):      
+        action = False      
+        pos = pygame.mouse.get_pos()      
+        if self.rect.collidepoint(pos):   
+                    
+            if pygame.mouse.get_pressed()[0] == 1 and not self.clicked:               
+                self.clicked = True               
+                action = True
+                
+        if pygame.mouse.get_pressed()[0] == 0:          
+            self.clicked = False       
+        surface.blit(self.image, (self.rect.x, self.rect.y))
+        return action
+    
+play_button = Button(430, 300, pygame.image.load("assets/images/menu/bttnPlay.png").convert_alpha(), 3.5)
+settings_button = Button(430, 400, pygame.image.load("assets/images/menu/bttnSets.png").convert_alpha(), 3.5)
+credits_button = Button(430, 500, pygame.image.load("assets/images/menu/bttnCredits.png").convert_alpha(), 3.5)
+
+#game_screen = pygame.image.load("main_menu.webp").convert_alpha()
+#settings_screen = pygame.image.load("settings_button.jpg").convert_alpha()
+credits_screen = pygame.image.load("assets/images/menu/credits.png").convert_alpha()
+
+run = True
+
+while run: 
+
+    screen.fill("black")
+
+    if current_screen == "main_menu":
+
+        # draw title and background
+        screen.blit(titlebg, (0, 0))             
+
+        screen.blit(title, (297.5, 100))
+
+
+        # draw main menu
+        screen.blit(titlebg, (0, 0))
+        screen.blit(title, (297.5, 100))
+
+        # draw buttons and handle their actions
+        if play_button.draw(screen):  
+            current_screen = "game_screen" 
+
+        if settings_button.draw(screen): 
+            current_screen = "settings_screen" 
+
+        if credits_button.draw(screen):  
+            current_screen = "credits_screen"
+
+    elif current_screen == "game_screen":
+        # draw game screen
+        
+        #create game window
+        screenWidth = 1000
+        screenHeight = 600
+
+        screen = pygame.display.set_mode((screenWidth, screenHeight))
+        pygame.display.set_caption("Shop Fighter II")
+
+        #set frame rate
+        clock = pygame.time.Clock()
+        FPS = 60
+
+        #define colors
+        RED = (255, 0, 0)
+        YELLOW = (255, 255, 0)
+        WHITE = (255, 255, 255) 
+
+        #define fighter variables. SIZE IS FOR PLACEHOLERS
+        e3000Size = 162
+        e3000Scale = 4
+        #prolly need to change this when we get new sprites
+        e3000Offset = [72, 56]
+        e3000Data = [e3000Size, e3000Scale, e3000Offset]
+
+        wizardSize = 250
+        wizardScale = 3
+        #prolly need to change this when we get new sprites
+        wizardOffset = [112, 107]
+        wizardData = [wizardSize, wizardScale, wizardOffset]
+
+
+        #load background image
+        bgImage = pygame.image.load("assets/images/background/placeholderBG.jfif").convert_alpha()
+
+        #load spritesheets
+
+        e3000Sheet = pygame.image.load("assets/images/e3000/warrior.png").convert_alpha()
+        wizardSheet = pygame.image.load("assets/images/wizard/wizard.png").convert_alpha()
+
+        #define number of steps in each animation
+        e3000AnimationSteps = [10, 8, 1, 7, 7, 3, 7]
+        wizardAnimationSteps = [8, 8, 1, 8, 8, 3, 7]
+
+
+
+        #function for drawing background
+
+        def drawBG():
+            
+            scaledBG = pygame.transform.scale(bgImage, (screenWidth, screenHeight))
+            screen.blit(scaledBG, (0,0))
+
+        #function for drawing fighter health bars
+        def drawHealthBar(health, x, y):
+            ratio = health / 100
+            pygame.draw.rect(screen, WHITE, (x - 2, y -2, 404, 34))
+            pygame.draw.rect(screen, RED, (x, y, 400, 30))
+            pygame.draw.rect(screen, YELLOW, (x, y, 400 * ratio, 30))
+
+
+        #create 2 instances of fighters
+        fighter1 = Fighter(1, 200, 310, False, e3000Data, e3000Sheet, e3000AnimationSteps)
+        fighter2 = Fighter(2, 700, 310, True, wizardData, wizardSheet, wizardAnimationSteps)
+
+        #game loop
+        run = True
+
+        while run == True:
+
+            clock.tick(FPS)
+
+            #draw background
+            drawBG()
+
+            #show player stats
+            drawHealthBar(fighter1.health, 20, 20)
+            drawHealthBar(fighter2.health, 580, 20)
+
+            #move fighters
+            fighter1.move(screenWidth, screenHeight, screen, fighter2)
+            
+            #update fighters
+            fighter1.update()
+            fighter2.update()
+
+            #draw fighters
+            fighter1.draw(screen)
+            fighter2.draw(screen)
+
+            #event handler
+            for event in pygame.event.get():
+
+                if event.type == pygame.QUIT:
+
+                    run = False
+
+            #update display
+            pygame.display.update()
+
+
+        #exit pygame
+        pygame.quit()
+
+
+        if pygame.key.get_pressed()[pygame.K_ESCAPE]: 
+            current_screen = "main_menu"
+
+    '''elif current_screen == "settings_screen":
+        # draw settings screen
+        screen.fill("green")  # example background color for the settings screen
+        screen.blit(settings_screen, (0, 0))
+        if pygame.key.get_pressed()[pygame.K_ESCAPE]:  # return to main menu
+            current_screen = "main_menu"'''
+
+    if current_screen == "credits_screen":
+        # draw credits screen
+        screen.fill("purple")  # example background color for the credits screen
+        screen.blit(credits_screen, (0, 0))
+        if pygame.key.get_pressed()[pygame.K_ESCAPE]:  # return to main menu
+            current_screen = "main_menu"
+
+    clock.tick(60)  # limit FPS to 120
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            run = False
+
+    pygame.display.flip()
+
+pygame.quit()
