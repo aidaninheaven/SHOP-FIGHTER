@@ -8,6 +8,8 @@ from fighter import Fighter
 
 pygame.init()
 
+#START for copying into menu and game
+
 #create game window
 screenWidth = 1000
 screenHeight = 600
@@ -23,6 +25,13 @@ FPS = 60
 RED = (255, 0, 0)
 YELLOW = (255, 255, 0)
 WHITE = (255, 255, 255) 
+
+#define game variables
+introCount = 3
+lastCountUpdate = pygame.time.get_ticks()
+score = [0, 0] #player scores. [P1, P2]
+roundOver = False
+roundOverCooldown = 2000
 
 #define fighter variables. SIZE IS FOR PLACEHOLERS
 e3000Size = 162
@@ -42,15 +51,23 @@ wizardData = [wizardSize, wizardScale, wizardOffset]
 bgImage = pygame.image.load("assets/images/background/placeholderBG.jfif").convert_alpha()
 
 #load spritesheets
-
 e3000Sheet = pygame.image.load("assets/images/e3000/warrior.png").convert_alpha()
 wizardSheet = pygame.image.load("assets/images/wizard/wizard.png").convert_alpha()
+
+#load victory image
 
 #define number of steps in each animation
 e3000AnimationSteps = [10, 8, 1, 7, 7, 3, 7]
 wizardAnimationSteps = [8, 8, 1, 8, 8, 3, 7]
 
+#define font
+countFont = pygame.font.Font("assets/fonts/turok.ttf", 80)
+scoreFont = pygame.font.Font("assets/fonts/turok.ttf", 30)
 
+#function for drawing text
+def drawText(text, font, textColor, x, y):
+    img = font.render(text, True, textColor)
+    screen.blit(img, (x, y))
 
 #function for drawing background
 
@@ -85,9 +102,23 @@ while run == True:
     drawHealthBar(fighter1.health, 20, 20)
     drawHealthBar(fighter2.health, 580, 20)
 
-    #move fighters
-    fighter1.move(screenWidth, screenHeight, screen, fighter2)
+    #update countdown
+    if introCount <= 0:
+        #move fighters
+        fighter1.move(screenWidth, screenHeight, screen, fighter2)
+        fighter2.move(screenWidth, screenHeight, screen, fighter1)
     
+    else:
+        #display count timer
+        drawText(str(introCount), countFont, RED, screenWidth / 2, screenHeight / 3)
+
+        #update countdown
+        if (pygame.time.get_ticks() - lastCountUpdate) >= 1000:
+            introCount -=1
+            lastCountUpdate = pygame.time.get_ticks()
+        
+
+ 
     #update fighters
     fighter1.update()
     fighter2.update()
@@ -95,6 +126,21 @@ while run == True:
     #draw fighters
     fighter1.draw(screen)
     fighter2.draw(screen)
+
+    #check for player defeat
+    if roundOver == False:
+        if fighter1.alive == False:
+            score[1] += 1
+            roundOver = True
+            roundOverTime = pygame.time.get_ticks()
+
+        elif fighter2.alive == False:
+            score[0] += 1
+            roundOver = True
+            roundOverTime = pygame.time.get_ticks()
+
+    else:
+        pass
 
     #event handler
     for event in pygame.event.get():
@@ -109,3 +155,5 @@ while run == True:
 
 #exit pygame
 pygame.quit()
+
+#END
