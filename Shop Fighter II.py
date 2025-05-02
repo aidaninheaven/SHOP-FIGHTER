@@ -67,8 +67,8 @@ def drawHealthBar(health, x, y):
 
 
 #create 2 instances of fighters
-fighter1 = Fighter(200, 310, False, e3000Data, e3000Sheet, e3000AnimationSteps)
-fighter2 = Fighter(700, 310, True, wizardData, wizardSheet, wizardAnimationSteps)
+fighter1 = Fighter(1, 200, 310, False, e3000Data, e3000Sheet, e3000AnimationSteps)
+fighter2 = Fighter(2, 700, 310, True, wizardData, wizardSheet, wizardAnimationSteps)
 
 #game loop
 run = True
