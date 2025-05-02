@@ -1,9 +1,10 @@
 import pygame
+import time
+import random
+import math
 from fighter import Fighter
 
-projectiles = []
 
-print(Fighter)
 
 pygame.init()
 
