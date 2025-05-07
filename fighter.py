@@ -26,6 +26,9 @@ class Fighter():
         self.running = False
         self.jump = False
         self.attacking = False
+
+        self.collidingRight = False
+        self.collidingLeft = False
        
 
         #which attack is being used
@@ -57,7 +60,7 @@ class Fighter():
 
 
 
-    def move(self, screenWidth, screenHeight, surface, target):
+    def move(self, screenWidth, screenHeight, surface, target, roundOver):
 
         speed = 10
         gravity = 2
@@ -70,7 +73,7 @@ class Fighter():
         key = pygame.key.get_pressed()
 
         #can only perform other actions if not currently attacking
-        if self.attacking == False and self.alive == True:
+        if self.attacking == False and self.alive == True and roundOver == False:
             #check player 1 controls
             if self.player == 1:
 
@@ -159,6 +162,16 @@ class Fighter():
             self.flip = False
         else:
             self.flip = True
+
+        #make players collide
+        if self.rect.colliderect(target.rect):
+
+            self.rect.x -= dx
+            self.rect.y -= dy
+
+            self.handleCollision(target)
+
+
 
         #apply attack cooldown
         if self.attackCooldown > 0:
@@ -250,6 +263,18 @@ class Fighter():
             self.frameIndex = 0
             self.updateTime = pygame.time.get_ticks()
 
+    def handleCollision(self, target):
+        
+        if self.rect.x > target.rect.x:
+
+            self.rect.x += 5
+            target.rect.x -= 5
+
+        else:
+
+            self.rect.x -=5
+            target.rect.x +=5
+        
 
     def draw(self, surface):
 
