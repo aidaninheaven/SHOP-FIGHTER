@@ -27,7 +27,7 @@ YELLOW = (255, 255, 0)
 WHITE = (255, 255, 255) 
 
 #define game variables
-introCount = 3
+introCount = 0 #3
 lastCountUpdate = pygame.time.get_ticks()
 score = [0, 0] #player scores. [P1, P2]
 roundOver = False
@@ -55,6 +55,7 @@ e3000Sheet = pygame.image.load("assets/images/e3000/warrior.png").convert_alpha(
 wizardSheet = pygame.image.load("assets/images/wizard/wizard.png").convert_alpha()
 
 #load victory image
+victoryImg = pygame.image.load("assets/images//victory/victory.png")
 
 #define number of steps in each animation
 e3000AnimationSteps = [10, 8, 1, 7, 7, 3, 7]
@@ -79,7 +80,7 @@ def drawBG():
 #function for drawing fighter health bars
 def drawHealthBar(health, x, y):
     ratio = health / 100
-    pygame.draw.rect(screen, WHITE, (x - 2, y -2, 404, 34))
+    pygame.draw.rect(screen, WHITE, (x - 2, y -2, 404, 34)) #404, 34
     pygame.draw.rect(screen, RED, (x, y, 400, 30))
     pygame.draw.rect(screen, YELLOW, (x, y, 400 * ratio, 30))
 
@@ -101,12 +102,14 @@ while run == True:
     #show player stats
     drawHealthBar(fighter1.health, 20, 20)
     drawHealthBar(fighter2.health, 580, 20)
+    drawText("P1: " + str(score[0]), scoreFont, RED, 20, 60)
+    drawText("P2: " + str(score[1]), scoreFont, RED, 580, 60)
 
     #update countdown
     if introCount <= 0:
         #move fighters
-        fighter1.move(screenWidth, screenHeight, screen, fighter2)
-        fighter2.move(screenWidth, screenHeight, screen, fighter1)
+        fighter1.move(screenWidth, screenHeight, screen, fighter2, roundOver)
+        fighter2.move(screenWidth, screenHeight, screen, fighter1, roundOver)
     
     else:
         #display count timer
@@ -140,7 +143,16 @@ while run == True:
             roundOverTime = pygame.time.get_ticks()
 
     else:
-        pass
+        #display victory image
+        screen.blit(victoryImg, (360, 150))
+
+        if pygame.time.get_ticks() - roundOverTime > roundOverCooldown:
+            roundOver = False
+            introCount = 3
+
+            fighter1 = Fighter(1, 200, 310, False, e3000Data, e3000Sheet, e3000AnimationSteps)
+            fighter2 = Fighter(2, 700, 310, True, wizardData, wizardSheet, wizardAnimationSteps)
+            
 
     #event handler
     for event in pygame.event.get():
