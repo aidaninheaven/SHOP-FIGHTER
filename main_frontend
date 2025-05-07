@@ -34,6 +34,7 @@ screen.fill("white")
 pygame.display.flip()
 time.sleep(0.1)
 
+# Animation logic (unchanged)
 itr = 20
 for i in range(itr):
     titlex = 297.5
@@ -48,13 +49,14 @@ for i in range(itr):
     time.sleep(0.01)
     itr = itr - 1
 
+# Directly transition to the main menu
+current_screen = "main_menu"
+
 ScreenWidth = 1080
 ScreenHeight = 720
 
 screen = pygame.display.set_mode((ScreenWidth, ScreenHeight))
 pygame.display.set_caption("Shopfighter")
-
-current_screen = "main_menu"  # Start with the main menu
 
 # Button class
 
@@ -84,6 +86,7 @@ class Button():
 play_button = Button(430, 300, pygame.image.load("bttnPlay.png").convert_alpha(), 3.5)
 settings_button = Button(430, 400, pygame.image.load("bttnSets.png").convert_alpha(), 3.5)
 credits_button = Button(430, 500, pygame.image.load("bttnCredits.png").convert_alpha(), 3.5)
+back_button = Button(430, 600, pygame.image.load("bttnSets.png").convert_alpha(), 3.5)
 
 game_screen = pygame.image.load("main_menu.webp").convert_alpha()
 settings_screen = pygame.image.load("settings_button.jpg").convert_alpha()
@@ -96,49 +99,47 @@ while run:
     screen.fill("black")
 
     if current_screen == "main_menu":
-
-        # draw title and background
-        screen.blit(titlebg, (0, 0))             
-
-        screen.blit(title, (297.5, 100))
-
-
-        # draw main menu
+        # Draw main menu
         screen.blit(titlebg, (0, 0))
         screen.blit(title, (297.5, 100))
 
-        # draw buttons and handle their actions
+        # Draw buttons and handle their actions
         if play_button.draw(screen):  
-            current_screen = "game_screen" 
+            current_screen = "game_screen"
 
-        if settings_button.draw(screen): 
-            current_screen = "settings_screen" 
+        if settings_button.draw(screen):  
+            current_screen = "settings_screen"
 
-        if credits_button.draw(screen):  
+        if credits_button.draw(screen): 
             current_screen = "credits_screen"
 
     elif current_screen == "game_screen":
-        # draw game screen
-        screen.fill("blue") 
+        # Draw game screen
+        screen.fill("black") 
         screen.blit(game_screen, (0, 0))
-        if pygame.key.get_pressed()[pygame.K_ESCAPE]: 
+
+        # Draw back button
+        if back_button.draw(screen): 
             current_screen = "main_menu"
 
     elif current_screen == "settings_screen":
-        # draw settings screen
-        screen.fill("green")  # example background color for the settings screen
+        # Draw settings screen
+        screen.fill("black")  
         screen.blit(settings_screen, (0, 0))
-        if pygame.key.get_pressed()[pygame.K_ESCAPE]:  # return to main menu
+
+        # Draw back button
+        if back_button.draw(screen): 
             current_screen = "main_menu"
 
     elif current_screen == "credits_screen":
-        # draw credits screen
-        screen.fill("purple")  # example background color for the credits screen
+        # Draw credits screen
         screen.blit(credits_screen, (0, 0))
-        if pygame.key.get_pressed()[pygame.K_ESCAPE]:  # return to main menu
+
+        # Draw back button
+        if back_button.draw(screen):
             current_screen = "main_menu"
 
-    clock.tick(120)  # limit FPS to 120
+    clock.tick(60)  # Limit FPS to 60
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
