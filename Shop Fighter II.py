@@ -24,7 +24,7 @@ FPS = 60
 #define colors
 RED = (255, 0, 0)
 YELLOW = (255, 255, 0)
-WHITE = (255, 255, 255) 
+WHITE = (255, 255, 255)
 
 #define game variables
 introCount = 0 #3
@@ -55,7 +55,10 @@ e3000Sheet = pygame.image.load("assets/images/e3000/warrior.png").convert_alpha(
 wizardSheet = pygame.image.load("assets/images/wizard/wizard.png").convert_alpha()
 
 #load victory image
-victoryImg = pygame.image.load("assets/images//victory/victory.png")
+victoryImg = pygame.image.load("assets/images/ui/victory.png")
+
+#load health bar
+hpBar = pygame.image.load("assets/images/ui/healthbar.png")
 
 #define number of steps in each animation
 e3000AnimationSteps = [10, 8, 1, 7, 7, 3, 7]
@@ -78,11 +81,24 @@ def drawBG():
     screen.blit(scaledBG, (0,0))
 
 #function for drawing fighter health bars
-def drawHealthBar(health, x, y):
+def drawHealthBar(health, x, y, invert):
     ratio = health / 100
-    pygame.draw.rect(screen, WHITE, (x - 2, y -2, 404, 34)) #404, 34
+    #pygame.draw.rect(screen, WHITE, (x - 2, y -2, 404, 34)) #404, 34
+
+    scaledhpBar = pygame.transform.scale(hpBar, (550, 48))
+
+    scaledhpBar = pygame.transform.flip(scaledhpBar, invert, False)
+
     pygame.draw.rect(screen, RED, (x, y, 400, 30))
     pygame.draw.rect(screen, YELLOW, (x, y, 400 * ratio, 30))
+
+    if invert == False:
+
+        screen.blit(scaledhpBar, (x - 12, y - 8))
+
+    else:
+
+        screen.blit(scaledhpBar, (x - 138, y - 8))
 
 
 #create 2 instances of fighters
@@ -100,8 +116,8 @@ while run == True:
     drawBG()
 
     #show player stats
-    drawHealthBar(fighter1.health, 20, 20)
-    drawHealthBar(fighter2.health, 580, 20)
+    drawHealthBar(fighter1.health, 20, 20, False)
+    drawHealthBar(fighter2.health, 580, 20, True)
     drawText("P1: " + str(score[0]), scoreFont, RED, 20, 60)
     drawText("P2: " + str(score[1]), scoreFont, RED, 580, 60)
 
@@ -125,6 +141,8 @@ while run == True:
     #update fighters
     fighter1.update()
     fighter2.update()
+
+    
 
     #draw fighters
     fighter1.draw(screen)
