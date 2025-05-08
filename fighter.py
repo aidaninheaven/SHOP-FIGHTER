@@ -62,8 +62,8 @@ class Fighter():
 
     def move(self, screenWidth, screenHeight, surface, target, roundOver):
 
-        speed = 10
-        gravity = 2
+        speed = 6
+        gravity = 1.7
         dx = 0
         dy = 0
         self.running = False
@@ -94,8 +94,6 @@ class Fighter():
 
                 #attack
                 if key[pygame.K_f] or key[pygame.K_g] or key[pygame.K_r]:
-
-                    self.attack(surface, target)
                     
                     #determine which attack was used
                     if key[pygame.K_f]:
@@ -104,6 +102,8 @@ class Fighter():
                         self.attackType = 2
                     if key[pygame.K_r]:
                         self.attackType = 3
+
+                    self.attack(surface, target, self.player, self.attackType)
 
             #check player 2 controls
             if self.player == 2:
@@ -125,8 +125,6 @@ class Fighter():
 
                 #attack
                 if key[pygame.K_KP1] or key[pygame.K_KP2] or key[pygame.K_KP4]:
-
-                    self.attack(surface, target)
                     
                     #determine which attack was used
                     if key[pygame.K_KP1]:
@@ -135,6 +133,8 @@ class Fighter():
                         self.attackType = 2
                     if key[pygame.K_KP4]:
                         self.attackType = 3
+                    
+                    self.attack(surface, target, self.player, self.attackType)
 
 
         #apply gravity
@@ -166,10 +166,19 @@ class Fighter():
         #make players collide
         if self.rect.colliderect(target.rect):
 
-            self.rect.x -= dx
-            self.rect.y -= dy
+            #self.rect.x -= dx
+            #self.rect.y -= dy
 
             self.handleCollision(target)
+
+            if self.rect.left + dx < 0:
+
+                dx = 1 - self.rect.left
+            
+
+            if self.rect.right + dx > screenWidth:
+
+                dx = screenWidth - self.rect.right
 
 
 
@@ -238,10 +247,18 @@ class Fighter():
 
 
 
-    def attack(self, surface, target):
+    def attack(self, surface, target, player, attackType):
 
         if self.attackCooldown == 0:
             self.attacking = True
+
+            print(str(player))
+            print(str(attackType))
+
+            # changing hitboxes based on what character is attacking and what move is being used
+            if player == 1 and attackType == 1:
+
+                print("CONTINUE HERE")
 
             attackingRect = pygame.Rect(self.rect.centerx - (2 * self.rect.width * self.flip), self.rect.y, 2 * self.rect.width, self.rect.height)
 
@@ -264,7 +281,8 @@ class Fighter():
             self.updateTime = pygame.time.get_ticks()
 
     def handleCollision(self, target):
-        
+
+
         if self.rect.x > target.rect.x:
 
             self.rect.x += 5
@@ -279,5 +297,5 @@ class Fighter():
     def draw(self, surface):
 
         img = pygame.transform.flip(self.image, self.flip, False)
-        pygame.draw.rect(surface, (255, 0, 0), self.rect)
+        #pygame.draw.rect(surface, (255, 0, 0), self.rect)
         surface.blit(img, (self.rect.x - (self.offset[0] * self.imageScale), self.rect.y - (self.offset[1] * self.imageScale)))
