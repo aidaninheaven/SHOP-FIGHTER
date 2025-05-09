@@ -62,7 +62,7 @@ class Fighter():
 
     def move(self, screenWidth, screenHeight, surface, target, roundOver):
 
-        speed = 6
+        speed = 7
         gravity = 1.7
         dx = 0
         dy = 0
@@ -249,26 +249,47 @@ class Fighter():
 
     def attack(self, surface, target, player, attackType):
 
-        if self.attackCooldown == 0:
-            self.attacking = True
+        #CONTINUE HERE fix the delay its not done bro what r u doin
 
-            print(str(player))
-            print(str(attackType))
+        if self.attackCooldown == 0 and self.attacking == False:
+
+            self.attacking = True
+            self.attackStartTime = pygame.time.get_ticks()
+            self.attackType = attackType
+
+            attackingRect = None
 
             # changing hitboxes based on what character is attacking and what move is being used
-            if player == 1 and attackType == 1:
+            if player == 1:
+                
+                if attackType == 1:
+                    
+                    #fix this
+                    currentTime = pygame.time.get_ticks()
 
-                print("CONTINUE HERE")
+                    if currentTime - self.attackStartTime >= 200:
 
-            attackingRect = pygame.Rect(self.rect.centerx - (2 * self.rect.width * self.flip), self.rect.y, 2 * self.rect.width, self.rect.height)
+                        attackingRect = pygame.Rect(self.rect.centerx - (2 * self.rect.width * self.flip), self.rect.y + 35, 2 * self.rect.width, 40)
+                   
+                    
 
-            if attackingRect.colliderect(target.rect):
+                else:
+                    
+                    attackingRect = pygame.Rect(self.rect.centerx - (2 * self.rect.width * self.flip), self.rect.y, 2 * self.rect.width, self.rect.height)
+            
+            if player == 2:
+
+                attackingRect = pygame.Rect(self.rect.centerx - (2 * self.rect.width * self.flip), self.rect.y, 2 * self.rect.width, self.rect.height)
+
+            
+            if attackingRect and attackingRect.colliderect(target.rect):
                 target.health -= 10
                 target.hit = True
                 print("Hit")
                 print(target.health)
 
-            pygame.draw.rect(surface, (0, 255, 0), attackingRect)
+            if attackingRect:
+                pygame.draw.rect(surface, (0, 255, 0), attackingRect)
 
 
     def updateAction(self, newAction):
