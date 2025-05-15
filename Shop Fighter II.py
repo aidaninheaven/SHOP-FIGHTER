@@ -11,8 +11,8 @@ pygame.init()
 #START for copying into menu and game
 
 #create game window
-screenWidth = 1000
-screenHeight = 600
+screenWidth = 960   #960
+screenHeight = 720   #720
 
 screen = pygame.display.set_mode((screenWidth, screenHeight))
 pygame.display.set_caption("Shop Fighter II")
@@ -61,7 +61,7 @@ victoryImg = pygame.image.load("assets/images/ui/victory.png")
 hpBar = pygame.image.load("assets/images/ui/healthbar.png")
 
 #define number of steps in each animation
-e3000AnimationSteps = [10, 8, 1, 7, 7, 3, 7]
+e3000AnimationSteps = [10, 8, 1, 7, 7, 3, 7] #7, 7, 3, 3, 10, 3, 7, 7, 8, 8
 wizardAnimationSteps = [8, 8, 1, 8, 8, 3, 7]
 
 #define font
@@ -117,7 +117,7 @@ while run == True:
 
     #show player stats
     drawHealthBar(fighter1.health, 20, 20, False)
-    drawHealthBar(fighter2.health, 580, 20, True)
+    drawHealthBar(fighter2.health, 540, 20, True)
     drawText("P1: " + str(score[0]), scoreFont, RED, 20, 60)
     drawText("P2: " + str(score[1]), scoreFont, RED, 580, 60)
 
@@ -139,8 +139,8 @@ while run == True:
 
  
     #update fighters
-    fighter1.update()
-    fighter2.update()
+    fighter1.update(1)
+    fighter2.update(2)
 
     
 
@@ -166,7 +166,7 @@ while run == True:
 
         if pygame.time.get_ticks() - roundOverTime > roundOverCooldown:
             roundOver = False
-            introCount = 3
+            introCount = 4
 
             fighter1 = Fighter(1, 200, 310, False, e3000Data, e3000Sheet, e3000AnimationSteps)
             fighter2 = Fighter(2, 700, 310, True, wizardData, wizardSheet, wizardAnimationSteps)
