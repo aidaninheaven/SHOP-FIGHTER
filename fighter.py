@@ -14,7 +14,7 @@ class Fighter():
         self.flip = flip
 
         self.animationList = self.loadImages(spriteSheet, animationSteps)
-        self.action = 0 #0: idle   #1: run     #2: jump    #3: attack1    #4: attack2    #5: hit    #6: death    #7: attack3
+        self.action = 0 #0: idle   #1: run     #2: jump    #3: attack1    #4: attack2    #5: hit    #6: death    #7: attack3  <--- this is wrong now
         self.frameIndex = 0
         self.image = self.animationList[self.action][self.frameIndex]
         self.updateTime = pygame.time.get_ticks()
@@ -191,33 +191,62 @@ class Fighter():
         self.rect.y += dy
 
     #handle animation updates
-    def update(self):
+    def update(self, player):
         
         #check what action the player is performing
-        if self.health <= 0:
-            self.health = 0
-            self.alive = False
-            self.updateAction(6)
-        elif self.hit == True:
-            self.updateAction(5) #5: hit
-        elif self.attacking == True:
-            if self.attackType == 1:
-                self.updateAction(3) #3: attack1
-            elif self.attackType == 2:
-                self.updateAction(4) #4: attack2
-     
         
-        elif self.jump == True:
-            self.updateAction(2) #2: jump
+        '''if player == 1:
 
-        elif self.running == True:
-            self.updateAction(1) #1: run
+            if self.health <= 0:
+                self.health = 0
+                self.alive = False
+                self.updateAction(1)
+            elif self.hit == True:
+                self.updateAction(3) #5: hit
+            elif self.attacking == True:
+                if self.attackType == 1:
+                    self.updateAction(6) #3: attack1
+                elif self.attackType == 2:
+                    self.updateAction(7) #4: attack2
+        
+            
+            elif self.jump == True:
+                self.updateAction(5) #2: jump
 
-        else:
-            self.updateAction(0) #0: idle
+            elif self.running == True:
+                self.updateAction(8) #1: run
+
+            else:
+                self.updateAction(4) #0: idle'''
+            
+        if player == 2 or player == 1:
+
+            #check what action the player is performing
+            if self.health <= 0:
+                self.health = 0
+                self.alive = False
+                self.updateAction(6)
+            elif self.hit == True:
+                self.updateAction(5) #5: hit
+            elif self.attacking == True:
+                if self.attackType == 1:
+                    self.updateAction(3) #3: attack1
+                elif self.attackType == 2:
+                    self.updateAction(4) #4: attack2
+        
+            
+            elif self.jump == True:
+                self.updateAction(2) #2: jump
+
+            elif self.running == True:
+                self.updateAction(1) #1: run
+
+            else:
+                self.updateAction(0) #0: idle
 
 
-        animationCooldown = 50
+
+        animationCooldown = 80
 
         #update image
         self.image = self.animationList[self.action][self.frameIndex]
@@ -263,15 +292,15 @@ class Fighter():
             if player == 1:
                 
                 if attackType == 1:
+                
                     
                     #fix this
-                    currentTime = pygame.time.get_ticks()
+                    #currentTime = pygame.time.get_ticks()
 
-                    if currentTime - self.attackStartTime >= 200:
+                    #if currentTime - self.attackStartTime >= 200:
 
-                        attackingRect = pygame.Rect(self.rect.centerx - (2 * self.rect.width * self.flip), self.rect.y + 35, 2 * self.rect.width, 40)
+                    attackingRect = pygame.Rect(self.rect.centerx - (2 * self.rect.width * self.flip), self.rect.y + 35, 2.3 * self.rect.width, 40)
                    
-                    
 
                 else:
                     
@@ -318,5 +347,5 @@ class Fighter():
     def draw(self, surface):
 
         img = pygame.transform.flip(self.image, self.flip, False)
-        #pygame.draw.rect(surface, (255, 0, 0), self.rect)
+        pygame.draw.rect(surface, (255, 0, 0), self.rect)
         surface.blit(img, (self.rect.x - (self.offset[0] * self.imageScale), self.rect.y - (self.offset[1] * self.imageScale)))
