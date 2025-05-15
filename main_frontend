@@ -5,7 +5,6 @@ import math
 
 pygame.init()
 
-# Initialize the mixer for playing music
 pygame.mixer.init()
 
 # Load and play background music
@@ -23,6 +22,7 @@ cursor = pygame.image.load("Cursor.png").convert_alpha()
 running = True
 pygame.display.set_caption("SHOP FIGHTER II")
 textfont = pygame.font.SysFont("mssansserif", 20)
+
 for i in range(60):
     screen.fill("black")
     pygame.display.flip()
@@ -30,11 +30,10 @@ for i in range(60):
         if event.type == pygame.QUIT:
             running = False
     time.sleep(0.01)
-screen.fill("white")
+screen.fill("black")
 pygame.display.flip()
 time.sleep(0.1)
 
-# Animation logic (unchanged)
 itr = 20
 for i in range(itr):
     titlex = 297.5
@@ -49,7 +48,6 @@ for i in range(itr):
     time.sleep(0.01)
     itr = itr - 1
 
-# Directly transition to the main menu
 current_screen = "main_menu"
 
 ScreenWidth = 1080
@@ -86,11 +84,11 @@ class Button():
 play_button = Button(430, 300, pygame.image.load("bttnPlay.png").convert_alpha(), 3.5)
 settings_button = Button(430, 400, pygame.image.load("bttnSets.png").convert_alpha(), 3.5)
 credits_button = Button(430, 500, pygame.image.load("bttnCredits.png").convert_alpha(), 3.5)
-back_button = Button(430, 600, pygame.image.load("bttnSets.png").convert_alpha(), 3.5)
+back_button = Button(430, 600, pygame.image.load("bttnBack.png").convert_alpha(), 3.5)
 
 game_screen = pygame.image.load("main_menu.webp").convert_alpha()
 settings_screen = pygame.image.load("settings_button.jpg").convert_alpha()
-credits_screen = pygame.image.load("credits.png").convert_alpha()
+credits_screen = pygame.image.load("Credits (1).png").convert_alpha()
 
 run = True
 
@@ -103,7 +101,6 @@ while run:
         screen.blit(titlebg, (0, 0))
         screen.blit(title, (297.5, 100))
 
-        # Draw buttons and handle their actions
         if play_button.draw(screen):  
             current_screen = "game_screen"
 
