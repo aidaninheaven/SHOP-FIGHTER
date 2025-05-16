@@ -191,11 +191,11 @@ class Fighter():
         self.rect.y += dy
 
     #handle animation updates
-    def update(self, player):
+    '''def update(self, player):
         
         #check what action the player is performing
         
-        '''if player == 1:
+        if player == 1:
 
             if self.health <= 0:
                 self.health = 0
@@ -217,9 +217,9 @@ class Fighter():
                 self.updateAction(8) #1: run
 
             else:
-                self.updateAction(4) #0: idle'''
+                self.updateAction(4) #0: idle
             
-        if player == 2 or player == 1:
+        if player == 2:
 
             #check what action the player is performing
             if self.health <= 0:
@@ -272,7 +272,63 @@ class Fighter():
                     self.hit = False
                     #if the player was in the middle of an attack, then the attack is stopped
                     self.attacking = False
+                    self.attackCooldown = 30'''
+    
+    def update(self, player):
+        # Update action based on state
+        if player == 1:
+            if self.health <= 0:
+                self.updateAction(1)  # Death
+            elif self.hit:
+                self.updateAction(3)  # Hit
+            elif self.attacking:
+                if self.attackType == 1:
+                    self.updateAction(6)  # Attack1
+                elif self.attackType == 2:
+                    self.updateAction(7)  # Attack2
+            elif self.jump:
+                self.updateAction(5)  # Jump
+            elif self.running:
+                self.updateAction(8)  # Run
+            else:
+                self.updateAction(4)  # Idle
+
+
+        elif player == 2:
+            if self.health <= 0:
+                self.updateAction(6)  # Death
+            elif self.hit:
+                self.updateAction(5)  # Hit
+            elif self.attacking:
+                if self.attackType == 1:
+                    self.updateAction(3)  # Attack1
+                elif self.attackType == 2:
+                    self.updateAction(4)  # Attack2
+            elif self.jump:
+                self.updateAction(2)  # Jump
+            elif self.running:
+                self.updateAction(1)  # Run
+            else:
+                self.updateAction(0)  # Idle
+
+        # Update animation frame
+        animationCooldown = 80
+        self.image = self.animationList[self.action][self.frameIndex]
+        if pygame.time.get_ticks() - self.updateTime > animationCooldown:
+            self.frameIndex += 1
+            self.updateTime = pygame.time.get_ticks()
+
+        # Reset animation if finished
+        if self.frameIndex >= len(self.animationList[self.action]):
+            if not self.alive:
+                self.frameIndex = len(self.animationList[self.action]) - 1
+            else:
+                self.frameIndex = 0
+                if self.action in [3, 4, 5, 6]:  # Attacks/Hit/Death
+                    self.attacking = False
                     self.attackCooldown = 30
+                    if self.action == 5:  # Hit
+                        self.hit = False
 
 
 
@@ -293,14 +349,17 @@ class Fighter():
                 
                 if attackType == 1:
                 
-                    
                     #fix this
-                    #currentTime = pygame.time.get_ticks()
+                    currentTime = pygame.time.get_ticks()
+                    print(str(currentTime))
+                    print(str(self.attackStartTime))
 
-                    #if currentTime - self.attackStartTime >= 200:
 
-                    attackingRect = pygame.Rect(self.rect.centerx - (2 * self.rect.width * self.flip), self.rect.y + 35, 2.3 * self.rect.width, 40)
-                   
+
+                    if currentTime - self.attackStartTime >= 200:
+
+                        attackingRect = pygame.Rect(self.rect.centerx - (2 * self.rect.width * self.flip), self.rect.y + 35, 2.3 * self.rect.width, 40)
+
 
                 else:
                     
@@ -319,7 +378,8 @@ class Fighter():
 
             if attackingRect:
                 pygame.draw.rect(surface, (0, 255, 0), attackingRect)
-
+    
+    
 
     def updateAction(self, newAction):
         #check if the new action is different to the previous one
