@@ -7,6 +7,7 @@ from fighter import Fighter
 
 
 pygame.init()
+pygame.mixer.init()
 
 #START for copying into menu and game
 
@@ -48,10 +49,10 @@ wizardData = [wizardSize, wizardScale, wizardOffset]
 
 
 #load background image
-bgImage = pygame.image.load("assets/images/background/placeholderBG.jfif").convert_alpha()
+bgImage = pygame.image.load("assets/images/background/Battle Background 6-2.png").convert_alpha()
 
 #load spritesheets
-e3000Sheet = pygame.image.load("assets/images/e3000/warrior.png").convert_alpha()
+e3000Sheet = pygame.image.load("assets/images/e3000/sprite_sheet.png").convert_alpha()
 wizardSheet = pygame.image.load("assets/images/wizard/wizard.png").convert_alpha()
 
 #load victory image
@@ -60,8 +61,12 @@ victoryImg = pygame.image.load("assets/images/ui/victory.png")
 #load health bar
 hpBar = pygame.image.load("assets/images/ui/healthbar.png")
 
+pygame.mixer.music.load("assets/audio/Battle Song.mp3")
+pygame.mixer.music.play(-1)
+pygame.mixer.music.set_volume(1.0) 
+
 #define number of steps in each animation
-e3000AnimationSteps = [10, 8, 1, 7, 7, 3, 7] #7, 7, 3, 3, 10, 3, 7, 7, 8, 8
+e3000AnimationSteps = [7, 7, 3, 3, 10, 3, 7, 7, 8, 8] #10, 8, 1, 7, 7, 3, 7
 wizardAnimationSteps = [8, 8, 1, 8, 8, 3, 7]
 
 #define font
