@@ -49,7 +49,19 @@ wizardData = [wizardSize, wizardScale, wizardOffset]
 
 
 #load background image
-bgImage = pygame.image.load("assets/images/background/rainbg.png").convert_alpha()
+bgSheet = pygame.image.load("assets/images/background/rainbg.png").convert_alpha()
+
+# prepare background animation frames
+bgAnimList = []
+for i in range(26):
+    frame = bgSheet.subsurface(i * 408, 0, 408, 309)
+    frame = pygame.transform.scale(frame, (screenWidth, screenHeight))
+    bgAnimList.append(frame)
+
+bgFrame = 0
+bgUpdateTime = pygame.time.get_ticks()
+bgFrameCooldown = 100
+
 
 #load spritesheets
 e3000Sheet = pygame.image.load("assets/images/e3000/sprite_sheet.png").convert_alpha()
@@ -80,18 +92,12 @@ def drawText(text, font, textColor, x, y):
 
 #function for drawing background
 def drawBG():
-
-    if bgImage == "assets/images/background/rainbg.png":
-
-        bgAnimList = []
-
-        for x in 26:
-            tempBG = bgImage.subsurface(x * 408, 309, 408, 309)
-
-            bgAnimList.append(pygame.transform.scale(tempBG, (408, 309)))
-    
-    scaledBG = pygame.transform.scale(bgImage, (screenWidth, screenHeight))
-    screen.blit(scaledBG, (0,0))
+    global bgFrame, bgUpdateTime
+    currentTime = pygame.time.get_ticks()
+    if currentTime - bgUpdateTime >= bgFrameCooldown:
+        bgFrame = (bgFrame + 1) % len(bgAnimList)
+        bgUpdateTime = currentTime
+    screen.blit(bgAnimList[bgFrame], (0, 0))
 
 #function for drawing fighter health bars
 def drawHealthBar(health, x, y, invert):
