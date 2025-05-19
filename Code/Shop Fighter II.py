@@ -36,20 +36,20 @@ roundOverCooldown = 2000
 
 #define fighter variables. SIZE IS FOR PLACEHOLERS
 e3000Size = 162
-e3000Scale = 4
+e3000Scale = 4.8
 #prolly need to change this when we get new sprites
 e3000Offset = [72, 56]
 e3000Data = [e3000Size, e3000Scale, e3000Offset]
 
 wizardSize = 250
-wizardScale = 3
+wizardScale = 3.6
 #prolly need to change this when we get new sprites
 wizardOffset = [112, 107]
 wizardData = [wizardSize, wizardScale, wizardOffset]
 
 
 #load background image
-bgImage = pygame.image.load("assets/images/background/Battle Background 6-2.png").convert_alpha()
+bgImage = pygame.image.load("assets/images/background/rainbg.png").convert_alpha()
 
 #load spritesheets
 e3000Sheet = pygame.image.load("assets/images/e3000/sprite_sheet.png").convert_alpha()
@@ -79,8 +79,16 @@ def drawText(text, font, textColor, x, y):
     screen.blit(img, (x, y))
 
 #function for drawing background
-
 def drawBG():
+
+    if bgImage == "assets/images/background/rainbg.png":
+
+        bgAnimList = []
+
+        for x in 26:
+            tempBG = bgImage.subsurface(x * 408, 309, 408, 309)
+
+            bgAnimList.append(pygame.transform.scale(tempBG, (408, 309)))
     
     scaledBG = pygame.transform.scale(bgImage, (screenWidth, screenHeight))
     screen.blit(scaledBG, (0,0))
@@ -144,8 +152,9 @@ while run == True:
 
  
     #update fighters
-    fighter1.update(1)
-    fighter2.update(2)
+    fighter1.update(1, fighter2)
+    fighter2.update(2, fighter1)
+
 
     
 
