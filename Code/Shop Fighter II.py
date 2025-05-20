@@ -41,10 +41,10 @@ e3000Scale = 4.8
 e3000Offset = [72, 56]
 e3000Data = [e3000Size, e3000Scale, e3000Offset]
 
-wizardSize = 250
-wizardScale = 3.6
+wizardSize = 200 # -10 for y, +31 for x
+wizardScale = 2.7
 #prolly need to change this when we get new sprites
-wizardOffset = [112, 107]
+wizardOffset = [112, 61]
 wizardData = [wizardSize, wizardScale, wizardOffset]
 
 
@@ -65,7 +65,7 @@ bgFrameCooldown = 100
 
 #load spritesheets
 e3000Sheet = pygame.image.load("assets/images/e3000/sprite_sheet.png").convert_alpha()
-wizardSheet = pygame.image.load("assets/images/wizard/wizard.png").convert_alpha()
+wizardSheet = pygame.image.load("assets/images/staff/staff_sheet.png").convert_alpha()
 
 #load victory image
 victoryImg = pygame.image.load("assets/images/ui/victory.png")
@@ -79,7 +79,7 @@ pygame.mixer.music.set_volume(1.0)
 
 #define number of steps in each animation
 e3000AnimationSteps = [7, 7, 3, 3, 10, 3, 7, 7, 8, 8] #10, 8, 1, 7, 7, 3, 7
-wizardAnimationSteps = [8, 8, 1, 8, 8, 3, 7]
+wizardAnimationSteps = [7, 2, 4, 6, 2, 8, 8, 8, 8, 8] #8, 8, 1, 8, 8, 3, 7
 
 #define font
 countFont = pygame.font.Font("assets/fonts/turok.ttf", 80)
