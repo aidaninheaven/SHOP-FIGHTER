@@ -257,6 +257,7 @@ class Fighter():
                     animationCooldown = 40
                     self.updateAction(5)  # Attack1
                 elif self.attackType == 2:
+                    animationCooldown = 100
                     self.updateAction(6)  # Attack2
                 elif self.attackType == 3:
                     self.updateAction(8) #Attack 3
@@ -303,21 +304,34 @@ class Fighter():
             self.attackHitboxTriggered = False  # Reset trigger flag
 
             # Set attackDelay based on type
-            if self.attackType == 1:
-                self.attackDelay = 320
-            elif self.attackType == 2:
-                self.attackDelay = 240
-            elif self.attackType == 3:
-                self.attackDelay = 400
-            else:
-                self.attackDelay = 200  # default fallback
+            if player == 1:
+
+                if self.attackType == 1:
+                    self.attackDelay = 320
+                elif self.attackType == 2:
+                    self.attackDelay = 160
+                elif self.attackType == 3:
+                    self.attackDelay = 400
+                else:
+                    self.attackDelay = 200  # default fallback
+
+            elif player == 2:
+
+                if self.attackType == 1:
+                    self.attackDelay = 200
+                elif self.attackType == 2:
+                    self.attackDelay = 500
+                elif self.attackType == 3:
+                    self.attackDelay = 400
+                else:
+                    self.attackDelay = 200  # default fallback
+
 
 
     def applyAttackHitbox(self, surface, target):
         attackingRect = None
 
-        #HELP
-
+        #mr e attacks
         if self.player == 1 and self.attackType == 1:
 
             hitbox_width = 2.5 * self.rect.width
@@ -331,7 +345,20 @@ class Fighter():
 
             attackingRect = pygame.Rect(hitbox_x, hitbox_y, hitbox_width, hitbox_height)
 
-        #staff attack 1
+        elif self.player == 1 and self.attackType == 2:
+
+            hitbox_width = 2.5 * self.rect.width
+            hitbox_height = self.rect.height
+            hitbox_y = self.rect.y
+
+            if self.flip:
+                hitbox_x = self.rect.centerx - hitbox_width
+            else:
+                hitbox_x = self.rect.centerx
+
+            attackingRect = pygame.Rect(hitbox_x, hitbox_y, hitbox_width, hitbox_height)
+
+        #staff attacks
         elif self.player == 2 and self.attackType == 1:
 
             hitbox_width = 3 * self.rect.width
@@ -344,6 +371,25 @@ class Fighter():
                 hitbox_x = self.rect.centerx
 
             attackingRect = pygame.Rect(hitbox_x, hitbox_y, hitbox_width, hitbox_height)
+
+
+        elif self.player == 2 and self.attackType == 2:
+            # This hitbox appears some distance in front of the player,
+            # not tied to the exact player rectangle.
+
+            hitbox_width = 200
+            hitbox_height = 100
+            hitbox_y = self.rect.centery - hitbox_height // 2  # vertically centered
+
+            if self.flip:
+                # Position hitbox far to the left
+                hitbox_x = self.rect.left - 250
+            else:
+                # Position hitbox far to the right
+                hitbox_x = self.rect.right + 50
+
+            attackingRect = pygame.Rect(hitbox_x, hitbox_y, hitbox_width, hitbox_height)
+
 
         else:
             # Default hitbox
