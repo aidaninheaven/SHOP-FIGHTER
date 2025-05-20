@@ -99,25 +99,23 @@ def drawBG():
         bgUpdateTime = currentTime
     screen.blit(bgAnimList[bgFrame], (0, 0))
 
-#function for drawing fighter health bars
 def drawHealthBar(health, x, y, invert):
     ratio = health / 100
-    #pygame.draw.rect(screen, WHITE, (x - 2, y -2, 404, 34)) #404, 34
-
     scaledhpBar = pygame.transform.scale(hpBar, (550, 48))
-
     scaledhpBar = pygame.transform.flip(scaledhpBar, invert, False)
 
+    # Draw the red background bar
     pygame.draw.rect(screen, RED, (x, y, 400, 30))
-    pygame.draw.rect(screen, YELLOW, (x, y, 400 * ratio, 30))
 
-    if invert == False:
-
+    # Draw the yellow foreground bar (health)
+    if not invert:
+        pygame.draw.rect(screen, YELLOW, (x, y, 400 * ratio, 30))
         screen.blit(scaledhpBar, (x - 12, y - 8))
-
     else:
-
+        # Offset the yellow bar to draw from right to left
+        pygame.draw.rect(screen, YELLOW, (x + (400 * (1 - ratio)), y, 400 * ratio, 30))
         screen.blit(scaledhpBar, (x - 138, y - 8))
+
 
 
 #create 2 instances of fighters
