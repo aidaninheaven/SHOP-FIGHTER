@@ -36,6 +36,7 @@ class Fighter():
         self.attackCooldown = 0
         self.hit = False
         self.health = 100
+        self.specBar = 0
         self.alive = True
         self.attackDelay = 0  #ms delay before attack hitbox triggers
         self.attackHitboxTriggered = False
@@ -233,6 +234,7 @@ class Fighter():
                     self.updateAction(6)  # Attack1
                 elif self.attackType == 2:
                     self.updateAction(7)  # Attack2
+                    animationCooldown = 120
                 elif self.attackType == 3:
                     self.updateAction(9) #Attack3
             elif self.jump:
@@ -309,7 +311,7 @@ class Fighter():
                 if self.attackType == 1:
                     self.attackDelay = 320
                 elif self.attackType == 2:
-                    self.attackDelay = 160
+                    self.attackDelay = 320
                 elif self.attackType == 3:
                     self.attackDelay = 400
                 else:
@@ -379,7 +381,7 @@ class Fighter():
 
             hitbox_width = 200
             hitbox_height = 100
-            hitbox_y = self.rect.centery - hitbox_height // 2  # vertically centered
+            hitbox_y = self.rect.centery - hitbox_height  # vertically centered
 
             if self.flip:
                 # Position hitbox far to the left
