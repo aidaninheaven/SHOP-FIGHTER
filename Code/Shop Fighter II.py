@@ -116,7 +116,9 @@ def drawHealthBar(health, x, y, invert):
         pygame.draw.rect(screen, YELLOW, (x + (400 * (1 - ratio)), y, 400 * ratio, 30))
         screen.blit(scaledhpBar, (x - 138, y - 8))
 
-
+def drawSpecBar(specBar, x, y, invert):
+    
+    pass
 
 #create 2 instances of fighters
 fighter1 = Fighter(1, 200, 310, False, e3000Data, e3000Sheet, e3000AnimationSteps)
