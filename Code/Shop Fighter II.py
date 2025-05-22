@@ -1,3 +1,4 @@
+
 import pygame
 import time
 import random
@@ -5,6 +6,12 @@ import math
 from fighter import Fighter
 
 
+#ADD STUN TO CHARACTERS
+#ADD MUSIC + SOUNDS FOR EVERYTHING
+#FIX HOW THE MOVES INTERACT WITH BLOCKING
+#AFTER THE ROUND ENDS GO BACK TO MENU
+#ADD IN STUFF TO THE MAIN MENU    AND FIX THE RESOLUTION
+#
 
 pygame.init()
 pygame.mixer.init()
@@ -48,7 +55,6 @@ wizardScale = 2.7
 wizardOffset = [112, 61]
 wizardData = [wizardSize, wizardScale, wizardOffset]
 
-
 #load background image
 bgSheet = pygame.image.load("assets/images/background/rainbg.png").convert_alpha()
 
@@ -62,7 +68,6 @@ for i in range(26):
 bgFrame = 0
 bgUpdateTime = pygame.time.get_ticks()
 bgFrameCooldown = 100
-
 
 #load spritesheets
 e3000Sheet = pygame.image.load("assets/images/e3000/sprite_sheet.png").convert_alpha()
@@ -86,7 +91,7 @@ pygame.mixer.music.set_volume(1.0)
 e3000AnimationSteps = [7, 7, 3, 3, 10, 3, 7, 7, 8, 8] #10, 8, 1, 7, 7, 3, 7
 wizardAnimationSteps = [7, 2, 4, 6, 2, 8, 8, 8, 8, 8] #8, 8, 1, 8, 8, 3, 7
 
-#define font
+#define fontff
 countFont = pygame.font.Font("assets/fonts/turok.ttf", 80)
 scoreFont = pygame.font.Font("assets/fonts/turok.ttf", 30)
 
@@ -138,12 +143,6 @@ def drawSpecBar(specBar, x, y, invert):
         pygame.draw.rect(screen, BLUE, (x + (250 * (1 - specRatio)), y, barLength, barHeight))
         screen.blit(scaledSpecBar2, (x - 10, 60))  # adjust as needed for alignment
 
-
-
-
-    
-    
-
 #create 2 instances of fighters
 fighter1 = Fighter(1, 200, 310, False, e3000Data, e3000Sheet, e3000AnimationSteps)
 fighter2 = Fighter(2, 700, 310, True, wizardData, wizardSheet, wizardAnimationSteps)
@@ -155,6 +154,9 @@ while run == True:
 
     clock.tick(FPS)
 
+    # get events once per frame
+    eventList = pygame.event.get()
+
     #draw background
     drawBG()
 
@@ -163,17 +165,19 @@ while run == True:
     drawHealthBar(fighter2.health, 540, 20, True)
 
     drawSpecBar(fighter1.specBar, 120, 70.5, False)
-    drawSpecBar(fighter2.specBar, 50, 70.5, True)
+    drawSpecBar(fighter2.specBar, 590, 70.5, True)
 
-    drawText("P1: " + str(score[0]), scoreFont, RED, 30, 60)
-    drawText("P2: " + str(score[1]), scoreFont, RED, 870, 60)
+    #drawText("ERIKSSON: " + str(score[0]), scoreFont, RED, 30, 60)
+    #drawText("STAFF: " + str(score[1]), scoreFont, RED, 870, 60)
+    drawText("ERIKSSON", scoreFont, RED, 30, 60)
+    drawText("STAFF", scoreFont, RED, 870, 60)
 
     #update countdown
     if introCount <= 0:
         #move fighters
         fighter1.move(screenWidth, screenHeight, screen, fighter2, roundOver)
         fighter2.move(screenWidth, screenHeight, screen, fighter1, roundOver)
-       
+    
     else:
         #display count timer
         drawText(str(introCount), countFont, RED, screenWidth / 2, screenHeight / 3)
@@ -182,14 +186,10 @@ while run == True:
         if (pygame.time.get_ticks() - lastCountUpdate) >= 1000:
             introCount -=1
             lastCountUpdate = pygame.time.get_ticks()
-        
 
- 
     #update fighters
     fighter1.update(1, fighter2)
     fighter2.update(2, fighter1)
-
-
 
     #draw fighters
     fighter1.draw(screen)
@@ -217,20 +217,15 @@ while run == True:
 
             fighter1 = Fighter(1, 200, 310, False, e3000Data, e3000Sheet, e3000AnimationSteps)
             fighter2 = Fighter(2, 700, 310, True, wizardData, wizardSheet, wizardAnimationSteps)
-            
 
     #event handler
-    for event in pygame.event.get():
-
+    for event in eventList:
         if event.type == pygame.QUIT:
-
             run = False
 
     #update display
     pygame.display.update()
 
-
 #exit pygame
 pygame.quit()
 
-#END
