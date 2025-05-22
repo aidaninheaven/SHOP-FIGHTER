@@ -26,6 +26,7 @@ FPS = 60
 RED = (255, 0, 0)
 YELLOW = (255, 255, 0)
 WHITE = (255, 255, 255)
+BLUE = (0, 0, 255)
 
 #define game variables
 introCount = 0 #3
@@ -72,6 +73,7 @@ victoryImg = pygame.image.load("assets/images/ui/victory.png")
 
 #load health bar
 hpBar = pygame.image.load("assets/images/ui/healthbar.png")
+specBarImg = pygame.image.load("assets/images/ui/specbar.png")
 
 pygame.mixer.music.load("assets/audio/Battle Song.mp3")
 pygame.mixer.music.play(-1)
@@ -117,8 +119,19 @@ def drawHealthBar(health, x, y, invert):
         screen.blit(scaledhpBar, (x - 138, y - 8))
 
 def drawSpecBar(specBar, x, y, invert):
+
+    scaledSpecBar = pygame.transform.scale(specBarImg, (300, 40))
+
+    barLength = 250
+    barHeight = 30
+
+    if specBar < 101:
+        pygame.draw.rect(screen, BLUE, (x, y, barLength, barHeight))
+
+    screen.blit(scaledSpecBar, (110, 60))
+
     
-    pass
+    
 
 #create 2 instances of fighters
 fighter1 = Fighter(1, 200, 310, False, e3000Data, e3000Sheet, e3000AnimationSteps)
@@ -137,8 +150,11 @@ while run == True:
     #show player stats
     drawHealthBar(fighter1.health, 20, 20, False)
     drawHealthBar(fighter2.health, 540, 20, True)
-    drawText("P1: " + str(score[0]), scoreFont, RED, 20, 60)
-    drawText("P2: " + str(score[1]), scoreFont, RED, 580, 60)
+
+    drawSpecBar(fighter1.specBar, 120, 70, False)
+
+    drawText("P1: " + str(score[0]), scoreFont, RED, 30, 60)
+    drawText("P2: " + str(score[1]), scoreFont, RED, 870, 60)
 
     #update countdown
     if introCount <= 0:
@@ -162,7 +178,6 @@ while run == True:
     fighter2.update(2, fighter1)
 
 
-    
 
     #draw fighters
     fighter1.draw(screen)
