@@ -36,7 +36,7 @@ class Fighter():
         self.attackCooldown = 0
         self.hit = False
         self.health = 100
-        self.specBar = 0
+        self.specBar = 100
         self.alive = True
         self.attackDelay = 0  #ms delay before attack hitbox triggers
         self.attackHitboxTriggered = False
