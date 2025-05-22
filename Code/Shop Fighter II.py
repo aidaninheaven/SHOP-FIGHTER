@@ -26,7 +26,7 @@ FPS = 60
 RED = (255, 0, 0)
 YELLOW = (255, 255, 0)
 WHITE = (255, 255, 255)
-BLUE = (0, 0, 255)
+BLUE = (70, 177, 235)
 
 #define game variables
 introCount = 0 #3
@@ -73,7 +73,10 @@ victoryImg = pygame.image.load("assets/images/ui/victory.png")
 
 #load health bar
 hpBar = pygame.image.load("assets/images/ui/healthbar.png")
+
+#load spec bar
 specBarImg = pygame.image.load("assets/images/ui/specbar.png")
+specBarImg2 = pygame.image.load("assets/images/ui/specbar2.png")
 
 pygame.mixer.music.load("assets/audio/Battle Song.mp3")
 pygame.mixer.music.play(-1)
@@ -119,16 +122,24 @@ def drawHealthBar(health, x, y, invert):
         screen.blit(scaledhpBar, (x - 138, y - 8))
 
 def drawSpecBar(specBar, x, y, invert):
+    specRatio = specBar / 100
+    barLength = 250 * specRatio
+    barHeight = 25
 
     scaledSpecBar = pygame.transform.scale(specBarImg, (300, 40))
+    scaledSpecBar2 = pygame.transform.scale(specBarImg2, (300, 40))
 
-    barLength = 250
-    barHeight = 30
-
-    if specBar < 101:
+    if not invert:
+        # Draw blue bar for Player 1
         pygame.draw.rect(screen, BLUE, (x, y, barLength, barHeight))
+        screen.blit(scaledSpecBar, (110, 60))
+    else:
+        # Draw blue bar for Player 2 (right to left)
+        pygame.draw.rect(screen, BLUE, (x + (250 * (1 - specRatio)), y, barLength, barHeight))
+        screen.blit(scaledSpecBar2, (x - 10, 60))  # adjust as needed for alignment
 
-    screen.blit(scaledSpecBar, (110, 60))
+
+
 
     
     
@@ -151,7 +162,8 @@ while run == True:
     drawHealthBar(fighter1.health, 20, 20, False)
     drawHealthBar(fighter2.health, 540, 20, True)
 
-    drawSpecBar(fighter1.specBar, 120, 70, False)
+    drawSpecBar(fighter1.specBar, 120, 70.5, False)
+    drawSpecBar(fighter2.specBar, 50, 70.5, True)
 
     drawText("P1: " + str(score[0]), scoreFont, RED, 30, 60)
     drawText("P2: " + str(score[1]), scoreFont, RED, 870, 60)
@@ -161,7 +173,7 @@ while run == True:
         #move fighters
         fighter1.move(screenWidth, screenHeight, screen, fighter2, roundOver)
         fighter2.move(screenWidth, screenHeight, screen, fighter1, roundOver)
-    
+       
     else:
         #display count timer
         drawText(str(introCount), countFont, RED, screenWidth / 2, screenHeight / 3)
