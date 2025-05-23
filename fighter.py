@@ -1,8 +1,29 @@
 import pygame
+pygame.mixer.init()
 
 #from projectiles import Projectile
 
+#block icon
 blockImg = pygame.image.load("assets/images/ui/shield.png")
+
+#load move sounds
+
+elight = pygame.mixer.Sound("assets/audio/erikssonlights.mp3")
+elight.set_volume(0.4)
+
+estrong = pygame.mixer.Sound("assets/audio/erikssonstrong.mp3")
+espec = pygame.mixer.Sound("assets/audio/codebreaker.mp3")
+
+stafflight1 = pygame.mixer.Sound("assets/audio/stafflight1.mp3")
+stafflight1.set_volume(0.5)
+
+stafflight2 = pygame.mixer.Sound("assets/audio/stafffire.mp3")
+stafflight2.set_volume(0.5)
+
+staffstrong = pygame.mixer.Sound("assets/audio/staffexplode.mp3")
+staffspec = pygame.mixer.Sound("assets/audio/staffbluefire.mp3")
+
+
 
 class Fighter():
     
@@ -36,7 +57,7 @@ class Fighter():
         #which attack is being used
         self.attackType = 0
         self.attackCooldown = 0
-        self.hit = False
+        
         self.health = 100
         self.specBar = 0
         self.alive = True
@@ -47,6 +68,11 @@ class Fighter():
         self.blocking = False
         self.blockImg = pygame.transform.scale(blockImg, (50, 50))  # Adjust size as needed
         self.blockOffset = 50  # How high above the player to show the block image
+
+        #stuns
+        self.hit = False
+        self.stunTime = 0
+        self.stunDuration = 0
 
 
 
@@ -105,7 +131,7 @@ class Fighter():
 
         keyChanged = currentTime - self.lastKeyTime >= self.keyDelay
 
-        if self.attacking == False and self.alive == True and roundOver == False:
+        if self.attacking == False and self.alive == True and roundOver == False and self.stunDuration <= 0:
             if self.player == 1:
                 if key[pygame.K_a]:
                     dx = -speed
@@ -174,7 +200,7 @@ class Fighter():
                 else:
                     self.blocking = False
 
-                if keyChanged:
+                '''if keyChanged:
                     if key[pygame.K_KP1] and not self.lastKeys[pygame.K_KP1]:
                         self.attackType = 1
                         self.attack(surface, target, self.player, self.attackType)
@@ -188,6 +214,25 @@ class Fighter():
                         self.attack(surface, target, self.player, self.attackType)
                         self.lastKeyTime = currentTime
                     elif key[pygame.K_KP5] and not self.lastKeys[pygame.K_KP5]:
+                        self.attackType = 4
+                        self.attack(surface, target, self.player, self.attackType)
+                        self.lastKeyTime = currentTime'''
+                
+                #for testing on my pc cuz i dont have the right keys
+                if keyChanged:
+                    if key[pygame.K_1] and not self.lastKeys[pygame.K_1]:
+                        self.attackType = 1
+                        self.attack(surface, target, self.player, self.attackType)
+                        self.lastKeyTime = currentTime
+                    elif key[pygame.K_2] and not self.lastKeys[pygame.K_2]:
+                        self.attackType = 2
+                        self.attack(surface, target, self.player, self.attackType)
+                        self.lastKeyTime = currentTime
+                    elif key[pygame.K_4] and not self.lastKeys[pygame.K_4]:
+                        self.attackType = 3
+                        self.attack(surface, target, self.player, self.attackType)
+                        self.lastKeyTime = currentTime
+                    elif key[pygame.K_5] and not self.lastKeys[pygame.K_5]:
                         self.attackType = 4
                         self.attack(surface, target, self.player, self.attackType)
                         self.lastKeyTime = currentTime
@@ -226,6 +271,9 @@ class Fighter():
         # Apply attack cooldown
         if self.attackCooldown > 0:
             self.attackCooldown -= 1
+
+        if self.stunDuration > 0:
+            self.stunDuration -= 1
 
         # Update player position
         self.rect.x += dx
@@ -387,10 +435,14 @@ class Fighter():
             hitbox_height = self.rect.height
             hitbox_y = self.rect.y
 
+            elight.play()
+
             if self.flip:
                 hitbox_x = self.rect.centerx - hitbox_width
             else:
                 hitbox_x = self.rect.centerx
+
+            
 
             attackingRect = pygame.Rect(hitbox_x, hitbox_y, hitbox_width, hitbox_height)
 
@@ -398,15 +450,19 @@ class Fighter():
                 target.health -= 5
                 self.specBar += 10
                 target.hit = True
+
+                target.stunDuration = 15
+                target.stunTime = target.stunDuration
             elif attackingRect.colliderect(target.rect) and target.blocking == True:
                 target.health -= 2
-                print()
 
         elif self.player == 1 and self.attackType == 2 and not self.blocking:
 
             hitbox_width = 2.5 * self.rect.width
             hitbox_height = self.rect.height
             hitbox_y = self.rect.y
+
+            elight.play()
 
             if self.flip:
                 hitbox_x = self.rect.centerx - hitbox_width
@@ -416,10 +472,15 @@ class Fighter():
             attackingRect = pygame.Rect(hitbox_x, hitbox_y, hitbox_width, hitbox_height)
 
             if attackingRect.colliderect(target.rect) and target.blocking == False:
-                target.health -= 15
-                self.specBar += 10
+                target.health -= 12
+                self.specBar += 15
                 target.hit = True
-                print(target.health)
+
+                target.stunDuration = 25
+                target.stunTime = target.stunDuration
+
+            elif attackingRect.colliderect(target.rect) and target.blocking == True:
+                target.health -= 3
 
         elif self.player == 1 and self.attackType == 3 and not self.blocking:
 
@@ -427,6 +488,8 @@ class Fighter():
             hitbox_width = 3.2 * self.rect.width
             hitbox_height = self.rect.height + 10
             hitbox_y = self.rect.y
+
+            estrong.play()
 
             if self.flip:
                 hitbox_x = self.rect.centerx - hitbox_width
@@ -438,15 +501,24 @@ class Fighter():
             if attackingRect.colliderect(target.rect) and target.blocking == False:
                 target.health -= 25
                 target.hit = True
-                print(target.health)
+
+                target.stunDuration = 35
+                target.stunTime = target.stunDuration
+            elif attackingRect.colliderect(target.rect) and target.blocking == True:
+                target.health -= 12.5
+
                 
             
 
         elif self.player == 1 and self.attackType == 4 and not self.blocking:
 
+            self.specBar -= 100
+
             hitbox_width = 4 * self.rect.width
             hitbox_height = self.rect.height * 2
             hitbox_y = self.rect.y
+
+            espec.play()
 
             if self.flip:
                 hitbox_x = self.rect.centerx - hitbox_width
@@ -457,10 +529,11 @@ class Fighter():
 
             if attackingRect.colliderect(target.rect):
                 target.health -= 40
-                self.specBar -= 100
                 target.hit = True
-                print(target.health)
 
+                target.stunDuration = 45
+                target.stunTime = target.stunDuration
+          
 
         #staff attacks
         elif self.player == 2 and self.attackType == 1 and not self.blocking:
@@ -468,6 +541,8 @@ class Fighter():
             hitbox_width = 3 * self.rect.width
             hitbox_height = self.rect.height / 2
             hitbox_y = self.rect.y
+
+            stafflight1.play()
 
             if self.flip:
                 hitbox_x = self.rect.centerx - hitbox_width
@@ -477,10 +552,13 @@ class Fighter():
             attackingRect = pygame.Rect(hitbox_x, hitbox_y, hitbox_width, hitbox_height)
 
             if attackingRect.colliderect(target.rect) and target.blocking == False:
-                target.health -= 5
-                self.specBar += 10
+                target.health -= 4
+                self.specBar += 7.5
                 target.hit = True
-                print(target.health)
+
+                target.stunDuration = 10
+                target.stunTime = target.stunDuration
+            
             elif attackingRect.colliderect(target.rect) and target.blocking == True:
                 target.health -= 1
 
@@ -488,7 +566,9 @@ class Fighter():
         elif self.player == 2 and self.attackType == 2 and not self.blocking:
             hitbox_width = 200
             hitbox_height = 100
-            hitbox_y = self.rect.centery - hitbox_height  # vertically centered
+            hitbox_y = self.rect.centery - hitbox_height  
+
+            stafflight2.play()
 
             if self.flip:
                 # Position hitbox far to the left
@@ -499,11 +579,16 @@ class Fighter():
 
             attackingRect = pygame.Rect(hitbox_x, hitbox_y, hitbox_width, hitbox_height)
 
-            if attackingRect.colliderect(target.rect):
-                target.health -= 10
-                self.specBar += 10
+            if attackingRect.colliderect(target.rect) and target.blocking == False:
+                target.health -= 15
+                self.specBar += 12
                 target.hit = True
-                print(target.health)
+
+                target.stunDuration = 25
+                target.stunTime = target.stunDuration
+            elif attackingRect.colliderect(target.rect) and target.blocking == True:
+                target.health -= 4
+                
 
         elif self.player == 2 and self.attackType == 3 and not self.blocking:
             
@@ -512,6 +597,8 @@ class Fighter():
             hitbox_height = self.rect.height * 1.25
             hitbox_y = self.rect.y
 
+            staffstrong.play()
+
             if self.flip:
                 hitbox_x = self.rect.centerx - hitbox_width
             else:
@@ -519,17 +606,24 @@ class Fighter():
 
             attackingRect = pygame.Rect(hitbox_x, hitbox_y - 90, hitbox_width, hitbox_height)
 
-            if attackingRect.colliderect(target.rect):
-                target.health -= 35
+            if attackingRect.colliderect(target.rect) and target.blocking == False:
+                target.health -= 25
                 target.hit = True
-                print(target.health)
-              
+
+                target.stunDuration = 35
+                target.stunTime = target.stunDuration
+           
+            elif attackingRect.colliderect(target.rect) and target.blocking == True:
+              target.health -= 12.5
 
         elif self.player == 2 and self.attackType == 4 and not self.blocking:
 
+            self.specBar -= 100
             hitbox_width = 200
             hitbox_height = 200
             hitbox_y = self.rect.centery - hitbox_height  # vertically centered
+
+            staffspec.play()
 
             if self.flip:
                 # Position hitbox far to the left
@@ -541,13 +635,14 @@ class Fighter():
             attackingRect = pygame.Rect(hitbox_x - 50, hitbox_y + 40, hitbox_width, hitbox_height)
 
             if attackingRect.colliderect(target.rect):
-                target.health -= 60
-                self.specBar -= 100
+                target.health -= 45
                 target.hit = True
-                print(target.health)
+
+                target.stunDuration = 45
+                target.stunTime = target.stunDuration
 
         # Debug: draw hitbox
-        pygame.draw.rect(surface, (0, 255, 0), attackingRect)
+        #pygame.draw.rect(surface, (0, 255, 0), attackingRect)
 
         if self.specBar > 100:
             self.specBar = 100
@@ -586,5 +681,5 @@ class Fighter():
             block_y = self.rect.y - self.blockOffset
             surface.blit(self.blockImg, (block_x, block_y))
 
-        pygame.draw.rect(surface, (255, 0, 0), self.rect)  # Debug: show hitbox
+        #pygame.draw.rect(surface, (255, 0, 0), self.rect)  # Debug: show hitbox
         surface.blit(img, (draw_x, self.rect.y - (self.offset[1] * self.imageScale)))
