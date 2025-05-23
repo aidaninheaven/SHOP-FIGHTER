@@ -200,7 +200,7 @@ class Fighter():
                 else:
                     self.blocking = False
 
-                '''if keyChanged:
+                if keyChanged:
                     if key[pygame.K_KP1] and not self.lastKeys[pygame.K_KP1]:
                         self.attackType = 1
                         self.attack(surface, target, self.player, self.attackType)
@@ -216,26 +216,8 @@ class Fighter():
                     elif key[pygame.K_KP5] and not self.lastKeys[pygame.K_KP5]:
                         self.attackType = 4
                         self.attack(surface, target, self.player, self.attackType)
-                        self.lastKeyTime = currentTime'''
-                
-                #for testing on my pc cuz i dont have the right keys
-                if keyChanged:
-                    if key[pygame.K_1] and not self.lastKeys[pygame.K_1]:
-                        self.attackType = 1
-                        self.attack(surface, target, self.player, self.attackType)
                         self.lastKeyTime = currentTime
-                    elif key[pygame.K_2] and not self.lastKeys[pygame.K_2]:
-                        self.attackType = 2
-                        self.attack(surface, target, self.player, self.attackType)
-                        self.lastKeyTime = currentTime
-                    elif key[pygame.K_4] and not self.lastKeys[pygame.K_4]:
-                        self.attackType = 3
-                        self.attack(surface, target, self.player, self.attackType)
-                        self.lastKeyTime = currentTime
-                    elif key[pygame.K_5] and not self.lastKeys[pygame.K_5]:
-                        self.attackType = 4
-                        self.attack(surface, target, self.player, self.attackType)
-                        self.lastKeyTime = currentTime
+            
 
         # Apply gravity
         self.velY += gravity
