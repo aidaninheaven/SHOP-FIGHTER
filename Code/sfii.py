@@ -1,20 +1,20 @@
 
 import pygame
+import sys
 import time
 import random
 import math
 from fighter import Fighter
 
-
-#ADD STUN TO CHARACTERS
-#ADD MUSIC + SOUNDS FOR EVERYTHING
-#FIX HOW THE MOVES INTERACT WITH BLOCKING
 #AFTER THE ROUND ENDS GO BACK TO MENU
 #ADD IN STUFF TO THE MAIN MENU    AND FIX THE RESOLUTION
-#
 
-pygame.init()
-pygame.mixer.init()
+if not pygame.init():
+    pygame.init()
+
+if not pygame.mixer.init():
+    pygame.mixer.init()
+
 
 #START for copying into menu and game
 
@@ -38,20 +38,20 @@ BLUE = (70, 177, 235)
 #define game variables
 introCount = 0 #3
 lastCountUpdate = pygame.time.get_ticks()
-score = [0, 0] #player scores. [P1, P2]
+score = [0, 0] #player scores. [P1, P2] not really needed anymore
 roundOver = False
 roundOverCooldown = 2000
 
-#define fighter variables. SIZE IS FOR PLACEHOLERS
+#define fighter variables
 e3000Size = 162
 e3000Scale = 4.8
-#prolly need to change this when we get new sprites
+
 e3000Offset = [72, 56]
 e3000Data = [e3000Size, e3000Scale, e3000Offset]
 
 wizardSize = 200 # -10 for y, +31 for x
 wizardScale = 2.7
-#prolly need to change this when we get new sprites
+
 wizardOffset = [112, 61]
 wizardData = [wizardSize, wizardScale, wizardOffset]
 
@@ -83,8 +83,8 @@ hpBar = pygame.image.load("assets/images/ui/healthbar.png")
 specBarImg = pygame.image.load("assets/images/ui/specbar.png")
 specBarImg2 = pygame.image.load("assets/images/ui/specbar2.png")
 
-pygame.mixer.music.load("assets/audio/Battle Song.mp3")
-pygame.mixer.music.play(-1)
+pygame.mixer.music.load("assets/audio/battle music.mp3")
+pygame.mixer.music.play(-1) #uncomment this to get battle music
 pygame.mixer.music.set_volume(1.0) 
 
 #define number of steps in each animation
@@ -152,6 +152,7 @@ run = True
 
 while run == True:
 
+
     clock.tick(FPS)
 
     # get events once per frame
@@ -169,8 +170,8 @@ while run == True:
 
     #drawText("ERIKSSON: " + str(score[0]), scoreFont, RED, 30, 60)
     #drawText("STAFF: " + str(score[1]), scoreFont, RED, 870, 60)
-    drawText("ERIKSSON", scoreFont, RED, 30, 60)
-    drawText("STAFF", scoreFont, RED, 870, 60)
+    drawText("E3000", scoreFont, RED, 30, 60)
+    drawText("STAFF", scoreFont, RED, 855, 60)
 
     #update countdown
     if introCount <= 0:
@@ -198,12 +199,12 @@ while run == True:
     #check for player defeat
     if roundOver == False:
         if fighter1.alive == False:
-            score[1] += 1
+
             roundOver = True
             roundOverTime = pygame.time.get_ticks()
 
         elif fighter2.alive == False:
-            score[0] += 1
+
             roundOver = True
             roundOverTime = pygame.time.get_ticks()
 
@@ -212,6 +213,8 @@ while run == True:
         screen.blit(victoryImg, (360, 150))
 
         if pygame.time.get_ticks() - roundOverTime > roundOverCooldown:
+
+            current_screen = "main_menu"
             roundOver = False
             introCount = 4
 
@@ -219,13 +222,25 @@ while run == True:
             fighter2 = Fighter(2, 700, 310, True, wizardData, wizardSheet, wizardAnimationSteps)
 
     #event handler
-    for event in eventList:
+    # In your game loop's event handling:
+    for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                # Immediate response to ESC
+                pygame.mixer.music.stop()
+                pygame.time.delay(100)  # Small delay to ensure music stops
+                sys.exit(100)
+
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_ESCAPE]:
+        pygame.mixer.music.stop()
+        pygame.time.delay(100)
+        sys.exit(100)
 
     #update display
     pygame.display.update()
 
 #exit pygame
 pygame.quit()
-
